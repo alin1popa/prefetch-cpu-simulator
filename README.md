@@ -25,7 +25,7 @@ PC gets incremented by one after each executed instruction (including jumps).
 | Code | Instruction | Explanation | New value of acc | New value of pc |
 |---|---|---|---|---|
 | 0 | NOP | No operation | - | - |
-| 1 | MOV | Move | pc | - |
+| 1 | MOV | Move | y | - |
 | 2 | ADD | Add | acc + y | - |
 | 3 | SUB | Subtract | acc - y | - |
 | 4 | MUL | Multiply | acc \* y | - |
