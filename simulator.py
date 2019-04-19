@@ -30,6 +30,10 @@ MISS_PENALTY = 0.100
 PREFETCH_TIME = 0.010
 FETCH_TIME = 0.010
 
+#MISS_PENALTY = 0.00
+#PREFETCH_TIME = 0.00
+#FETCH_TIME = 0.00
+
 
 class Processor:
     acc = 0
@@ -110,13 +114,16 @@ class Processor:
             
         time.sleep(MISS_PENALTY)    
         self.instr_pc = self.pc
-        self.instr = self.program[self.instr_pc]
+        if self.instr_pc < len(self.program):
+            self.instr = self.program[self.instr_pc]
+        else:
+            raise Exception("Exceeded program code")
         return self.instr
         
         
     def prefetch_instruction(self):
         time.sleep(PREFETCH_TIME)
-        self.instr_pc = self.pc + 1 if self.pc < len(program)-1 else self.pc
+        self.instr_pc = self.pc + 1 if self.pc < len(self.program)-1 else len(self.program)-1
         self.instr = self.program[self.instr_pc]
         return self.instr
         
