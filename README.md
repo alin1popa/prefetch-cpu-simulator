@@ -2,11 +2,11 @@
 CPU simulator to showcase the speed improvement of prefetching instructions
 
 ## Running the program
-Without prefetching instructions:
+Without instruction prefetching:
 
 python simulator.py --file sample_program.txt 
 
-With prefetching instructions:
+With instruction prefetching:
 
 python simulator.py --file sample_program.txt --prefetch
 
