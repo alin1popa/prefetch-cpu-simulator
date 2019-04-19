@@ -4,11 +4,11 @@ CPU simulator to showcase the speed improvement of prefetching instructions
 ## Running the program
 Without instruction prefetching:
 
-python simulator.py --file program_examples/squares.txt 
+python simulator.py --file program_examples/squares.txt --memory 100
 
 With instruction prefetching:
 
-python simulator.py --file program_examples/squares.txt --prefetch
+python simulator.py --file program_examples/squares.txt --memory 100 --prefetch
 
 ## Features
 - Single accumulator

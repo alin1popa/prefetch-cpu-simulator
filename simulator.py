@@ -45,11 +45,12 @@ class Processor:
     
     program = None
     prefetch = False
-    data = [0 for i in range(100)]
+    data = []
     
     
-    def __init__(self, prefetch):
+    def __init__(self, prefetch, memsize):
         self.prefetch = prefetch
+        self.data = [0 for i in range(memsize)]
         
     
     def save(self, y):
@@ -157,15 +158,17 @@ if __name__ == "__main__":
     prefetching for a custom instruction set processor')
     parser.add_argument('-f', '--file', required=True,
         help='program filename to run')
+    parser.add_argument('-m', '--memory', default=100,
+        help='memory size')
     parser.add_argument('-p','--prefetch', dest='prefetch', default=False, 
-        action='store_true')
+        help='activates prefetch if present', action='store_true')
     
     args = parser.parse_args()
     
     lines = [line.rstrip('\n') for line in open(args.file)]
     program = [map(lambda l: int(l), line.split(" ")) for line in lines]
     
-    cpu = Processor(args.prefetch)
+    cpu = Processor(args.prefetch, int(args.memory))
     cpu.read_program(program)
     cpu.run()
     
