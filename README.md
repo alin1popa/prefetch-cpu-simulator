@@ -13,7 +13,7 @@ python simulator.py --file program_examples/squares.txt --memory 100 --prefetch
 ## Features
 - Single accumulator
 - Instruction set of 21 instructions with 1 parameter each
-- Memory zone with 100 slots (picked that randomly)
+- Memory zone with custom number of slots (default 100)
 - Instruction register which emulates fetch/prefetch time and miss penalty time
 - Toggle between addressing modes: immediate value (default) and indirect addressing mode
 
