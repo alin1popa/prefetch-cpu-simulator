@@ -1,5 +1,5 @@
 # prefetch-cpu-simulator
-Simulator for a CPU based on a instruction set of 20 instructions to showcase the speed improvement of prefetching instructions
+Simulator for a CPU based on an instruction set of 20 instructions to showcase the speed improvement of prefetching instructions
 
 ## Running the program
 Without prefetching instructions:
