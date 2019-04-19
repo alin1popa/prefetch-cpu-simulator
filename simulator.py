@@ -37,8 +37,13 @@ class Processor:
     instr_pc = None
     
     program = None
+    prefetch = False
     data = [0 for i in range(100)]
     
+    
+    def __init__(self, prefetch):
+        self.prefetch = prefetch
+        
     
     def save(self, y):
         self.data[y] = self.acc
@@ -109,7 +114,8 @@ class Processor:
             
         self.fetch_instruction()
         instr = self.instr
-        self.prefetch_instruction()
+        if self.prefetch:
+            self.prefetch_instruction()
         self.process_instruction(instr[0], instr[1])
         
         return False
@@ -127,18 +133,19 @@ class Processor:
         
         
 if __name__ == "__main__":
-    cpu = Processor()
-    
     parser = argparse.ArgumentParser(description='Simulate instruction\
     prefetching for a custom instruction set processor')
     parser.add_argument('-f', '--file', required=True,
         help='program filename to run')
+    parser.add_argument('-p','--prefetch', dest='prefetch', default=False, 
+        action='store_true')
     
     args = parser.parse_args()
     
     lines = [line.rstrip('\n') for line in open(args.file)]
     program = [map(lambda l: int(l), line.split(" ")) for line in lines]
     
+    cpu = Processor(args.prefetch)
     cpu.read_program(program)
     cpu.run()
     
