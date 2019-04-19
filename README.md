@@ -15,9 +15,12 @@ python simulator.py --file sample_program.txt --prefetch
 - Instruction set of 21 instructions with 1 parameter each
 - Memory zone with 100 slots (picked that randomly)
 - Instruction register which emulates fetch/prefetch time and miss penalty time
+- Toggle between addressing modes: immediate value (default) and indirect addressing mode
 
 ## Instruction set
-Each instruction has one parameter, denoted y. PC gets incremented by one after each executed instruction (including jumps).
+Each instruction has one parameter, denoted y. When in immediate addressing mode, y is used as an immediate value. When in indirect addressing mode, y is used as memory[y] whenever it appears in the table below (e.g. in indirect addressing mode, if memory[10]=25, LOD 10 loads into accumulator the value stored in memory[25]; MOV 10 moves into accumulator the value stored in memory[10] etc). Toggle between the addressing modes with the ADR instruction.
+
+PC gets incremented by one after each executed instruction (including jumps).
 
 | Code | Instruction | Explanation | New value of acc | New value of pc |
 |---|---|---|---|---|
@@ -42,3 +45,4 @@ Each instruction has one parameter, denoted y. PC gets incremented by one after 
 | 18 | SAV | Save acc to memory[y] | - | - |
 | 19 | LOD | Load acc from memory[y] | memory[y] | - |
 | 20 | HLT | Halt | - | - |
+| 21 | ADR | Toggle addressing mode | - | - |

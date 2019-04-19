@@ -23,6 +23,7 @@ IJPN = 17   # jump if nonzero
 ISAV = 18   # save data
 ILOD = 19   # load data
 IHLT = 20   # halt
+IADR = 21   # toggle addressing mode
 
 
 MISS_PENALTY = 0.100
@@ -35,6 +36,8 @@ class Processor:
     pc = 0
     instr = None
     instr_pc = None
+    indirect = False
+    
     
     program = None
     prefetch = False
@@ -52,30 +55,40 @@ class Processor:
         
     def load(self, y):
         return (self.data[y], self.pc)
+        
+        
+    def toggle_adr(self):
+        self.indirect = not self.indirect
+        return (self.acc, self.pc)
+        
+        
+    def get_y(self, y):
+        return y if self.indirect is False else self.data[y]
     
     
     instruction_set = {
         INOP: lambda self, acc, pc, y: (acc, pc),
-        IMOV: lambda self, acc, pc, y: (y, pc),
-        IADD: lambda self, acc, pc, y: (acc + y, pc),
-        ISUB: lambda self, acc, pc, y: (acc - y, pc),
-        IMUL: lambda self, acc, pc, y: (acc * y, pc),
-        IDIV: lambda self, acc, pc, y: (acc / y, pc),
-        IAND: lambda self, acc, pc, y: (acc and y, pc),
-        IOR:  lambda self, acc, pc, y: (acc or y, pc),
+        IMOV: lambda self, acc, pc, y: (self.get_y(y), pc),
+        IADD: lambda self, acc, pc, y: (acc + self.get_y(y), pc),
+        ISUB: lambda self, acc, pc, y: (acc - self.get_y(y), pc),
+        IMUL: lambda self, acc, pc, y: (acc * self.get_y(y), pc),
+        IDIV: lambda self, acc, pc, y: (acc / self.get_y(y), pc),
+        IAND: lambda self, acc, pc, y: (acc and self.get_y(y), pc),
+        IOR:  lambda self, acc, pc, y: (acc or self.get_y(y), pc),
         INOT: lambda self, acc, pc, y: (not acc, pc),
-        IBWA: lambda self, acc, pc, y: (acc & y, pc),
-        IBWO: lambda self, acc, pc, y: (acc | y, pc),
-        IBWX: lambda self, acc, pc, y: (acc ^ y, pc),
-        IBWL: lambda self, acc, pc, y: (acc << y, pc),
-        IBWR: lambda self, acc, pc, y: (acc >> y, pc),
+        IBWA: lambda self, acc, pc, y: (acc & self.get_y(y), pc),
+        IBWO: lambda self, acc, pc, y: (acc | self.get_y(y), pc),
+        IBWX: lambda self, acc, pc, y: (acc ^ self.get_y(y), pc),
+        IBWL: lambda self, acc, pc, y: (acc << self.get_y(y), pc),
+        IBWR: lambda self, acc, pc, y: (acc >> self.get_y(y), pc),
         IBWN: lambda self, acc, pc, y: (~ acc, pc),
-        IJMP: lambda self, acc, pc, y: (acc, y),
-        IJPZ: lambda self, acc, pc, y: (acc, y) if acc == 0 else (acc, pc),
-        IJPN: lambda self, acc, pc, y: (acc, y) if acc != 0 else (acc, pc),
-        ISAV: lambda self, acc, pc, y: self.save(y),
-        ILOD: lambda self, acc, pc, y: self.load(y),
+        IJMP: lambda self, acc, pc, y: (acc, self.get_y(y)),
+        IJPZ: lambda self, acc, pc, y: (acc, self.get_y(y)) if acc == 0 else (acc, pc),
+        IJPN: lambda self, acc, pc, y: (acc, self.get_y(y)) if acc != 0 else (acc, pc),
+        ISAV: lambda self, acc, pc, y: self.save(self.get_y(y)),
+        ILOD: lambda self, acc, pc, y: self.load(self.get_y(y)),
         IHLT: lambda self, acc, pc, y: (acc, -2),
+        IADR: lambda self, acc, pc, y: self.toggle_adr()
     }
     
     
