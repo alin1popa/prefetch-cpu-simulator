@@ -51,14 +51,19 @@ class Processor:
     def __init__(self, prefetch, memsize):
         self.prefetch = prefetch
         self.data = [0 for i in range(memsize)]
+        self.memsize = memsize
         
     
     def save(self, y):
+        if y > self.memsize or y < 0:
+            raise Exception("Memory access error")
         self.data[y] = self.acc
         return (self.acc, self.pc)
         
         
     def load(self, y):
+        if y > self.memsize or y < 0:
+            raise Exception("Memory access error")
         return (self.data[y], self.pc)
         
         
@@ -166,13 +171,13 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     lines = [line.rstrip('\n') for line in open(args.file)]
-    program = [map(lambda l: int(l), line.split(" ")) for line in lines]
+    program = [list(map(lambda l: int(l), line.split(" "))) for line in lines]
     
     cpu = Processor(args.prefetch, int(args.memory))
     cpu.read_program(program)
     cpu.run()
     
-    print "Final accumulator value:", cpu.acc
-    print "CPU Memory data:", cpu.data
+    print("CPU Memory data:", cpu.data)
+    print("Final accumulator value:", cpu.acc)
     
     
